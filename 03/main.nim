@@ -6,20 +6,41 @@ type
         y: int
 
 
-proc parseMoves(moves: seq[string]): int =
-    var points: seq[Point] = @[Point()]
+proc parseMoves(moves: seq[string]): seq[Point] =
+    var di: int
+    var direction: char
+    var start: int
+    var p: int
+    result.add(Point())
     for move in moves:
-        if move[0] == 'R' or move[0] == 'L':
-            echo "moving right or left", " ", move
-            
+        direction = move[0]
+        di = parseInt(move[1..^1])
+        if direction == 'R':
+            start = result[^1].x
+            p = result[^1].y
+            for x in start..start+di:
+                result.add(Point(x:x, y:p))
+        elif direction == 'L':
+            start = result[^1].x
+            p = result[^1].y
+            for x in start..start-di:
+                result.add(Point(x:x, y:p))
+        elif direction == 'D':
+            start = result[^1].y
+            p = result[^1].x
+            for y in start..start-di:
+                result.add(Point(x:p, y:y))
+        elif direction == 'U':
+            start = result[^1].y
+            p = result[^1].x
+            for y in start..start+di:
+                result.add(Point(x:p, y:y))
+    
 
 
-
-var moves: seq[seq[string]] = @[]
 for line in split(readFile("data.txt"), "\n"):
     var a = parseMoves(split(line, ","))
-    # moves.add(split(line, ","))
+    echo len(a)
 
-echo len(moves)
-echo moves[0]
+
 
